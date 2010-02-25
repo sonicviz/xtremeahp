@@ -25,18 +25,7 @@ public class PrioritizeEngine {
 		levels = new Object[noOfLevels];
 	}
 
-	public void createNodes(int nodeLevel, String nodes) {
-		int size = 0;
-		StringTokenizer tokens = new StringTokenizer(nodes, ",");
-		size = tokens.countTokens();
-		if (nodeLevel == 1) {
-			String level[][] = new String[size - 1][size];
-			levels[nodeLevel - 1] = level;		//level 0
-		} else {
-			String[][] temp = (String[][]) levels[0];
-			String level[][] = new String[size + 1][temp[0].length + 1];
-			levels[nodeLevel - 1] = level;		//level 1
-		}
+	public void prepareArray(int nodeLevel, StringTokenizer tokens){
 		int count = 0;
 		// criteria
 		// array
@@ -54,7 +43,6 @@ public class PrioritizeEngine {
 			for (int r = 0; r < temp.length; r++) {
 				for (int c = 0; c < temp[r].length; c++) {
 					if (r == 0) { // level2 header
-						System.out.println("r:"+r+":c:"+c);
 						tempL2[r][c+1] = temp[r][c];
 					}
 				}
@@ -67,6 +55,22 @@ public class PrioritizeEngine {
 			}
 
 		}
+		
+	}
+	
+	public void createArray(int nodeLevel, String nodes) {
+		int size = 0;
+		StringTokenizer tokens = new StringTokenizer(nodes, ",");
+		size = tokens.countTokens();
+		if (nodeLevel == 1) {
+			String level[][] = new String[size - 1][size];
+			levels[nodeLevel - 1] = level;		//level 0
+		} else {
+			String[][] temp = (String[][]) levels[0];
+			String level[][] = new String[size + 1][temp[0].length + 1];
+			levels[nodeLevel - 1] = level;		//level 1
+		}
+		prepareArray(nodeLevel, tokens);
 	}
 
 	public void printArrays() {
@@ -99,9 +103,9 @@ public class PrioritizeEngine {
 		System.out.println("start");
 		PrioritizeEngine eng = new PrioritizeEngine(2);
 		System.out.println("init levels:" + eng.levels);
-		eng.createNodes(1, "reliability,speed,comfort");
+		eng.createArray(1, "reliability,speed,comfort");
 		// eng.updateNodes(1,"reliability,speed,comfort");
-		eng.createNodes(2, "ford,benz,toyota,honda");
+		eng.createArray(2, "ford,benz,toyota,honda");
 		eng.printArrays();
 	}
 }
